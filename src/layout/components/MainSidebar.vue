@@ -13,6 +13,7 @@ const { token } = ATheme.useToken()
 const app = useAppStore()
 const route = useRoute()
 const fullRoutes = getFullRoutes()
+const mainMenuRoutes = fullRoutes.filter(route => route.meta.parentName === 'root').filter(route => !route.meta?.hidden) ?? []
 
 /** Selected Item in main-menu 主栏菜单选中项 */
 const mainMenuKey = ref<string[]>()
@@ -40,9 +41,8 @@ const mainMenuInverted = computed({
 
 /** main-menu data 主栏菜单数据 */
 const mainMenuOptions = computed(() => {
-  const routes = fullRoutes.filter(route => route.meta.parentName === 'root').filter(route => !route.meta?.hidden) ?? []
   const mainMenuSetting = app.MenuSetting.mainMenu
-  return routes.map(route => mapRoutesAntMain(route, fullRoutes, t, app.MenuSetting.subMenu.collapsed, mainMenuSetting))
+  return mainMenuRoutes.map(route => mapRoutesAntMain(route, fullRoutes, t, app.MenuSetting.subMenu.collapsed, mainMenuSetting))
 })
 
 /** Handle main menu key change 处理主菜单键变化 */

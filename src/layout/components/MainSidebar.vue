@@ -15,9 +15,6 @@ const route = useRoute()
 const fullRoutes = getFullRoutes()
 const mainMenuRoutes = fullRoutes.filter(route => route.meta.parentName === 'root').filter(route => !route.meta?.hidden) ?? []
 
-/** Selected Item in main-menu 主栏菜单选中项 */
-const mainMenuKey = ref<string[]>()
-
 /** Collapsed State of main-menu 主栏菜单收缩状态 */
 const collMainMenu = computed({
   get: () => app.MenuSetting.mainMenu.collapsed,
@@ -39,6 +36,9 @@ const mainMenuInverted = computed({
   set: val => app.setMenuSetting({ mainMenu: { inverted: val } }),
 })
 
+/** Selected Item in main-menu 主栏菜单选中项 */
+const mainMenuKey = ref<string[]>()
+
 /** main-menu data 主栏菜单数据 */
 const mainMenuOptions = computed(() => {
   const mainMenuSetting = app.MenuSetting.mainMenu
@@ -54,16 +54,12 @@ const refreshMainMenu = () => {
   handleMainMenuKeyChange({ key: mainMenuKey.value[0] })
 }
 
-onMounted(() => {
-  refreshMainMenu()
-})
-
-watch(() => app.MenuSetting.subMenu.collapsed, (_val) => {
-  refreshMainMenu()
-})
-
 /** Style class for logo logo的样式类 */
 const logoClass = computed(() => !app.IsDarkMode && app.MenuSetting.mainMenu.inverted ? 'xb-bl-gray2! xb-b-1!' : '')
+
+onMounted(refreshMainMenu)
+
+watch(() => app.MenuSetting.subMenu.collapsed, refreshMainMenu)
 
 /** Exposes 公开对象 */
 defineExpose({ refreshMainMenu })

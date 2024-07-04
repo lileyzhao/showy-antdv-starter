@@ -64,18 +64,12 @@ const restoreSubMenu = useDebounceFn(() => {
       else if (!app.isMobile)
         topBarRef.value?.refreshTopMenu()
     }
-  }, 650)
-}, 500)
+  }, 350)
+}, 350)
 
 /** Cancel the restore of the sub-menu. 取消复原副栏菜单。 */
 const cancelRestoreSubMenu = () => {
   clearTimeout(mountTimeout.value)
-}
-
-/** Sub-menu collapse state changed. 副栏菜单折叠状态改变。 */
-const handleSubCollapsed = (collSubMenu: boolean) => {
-  // Update the main menu. 更新主栏菜单。
-  mainMenuKey.value = (collSubMenu ? route.name : route.matched[1].name) as string
 }
 
 /** Trigger mobile mode. 触发移动端模式。 */
@@ -110,14 +104,11 @@ const handleAction = (op: string, _val: any) => {
 <template>
   <a-layout has-sider style="min-height: 100vh">
     <!-- Sidebar (Desktop): Main Sidebar. 侧边栏(电脑端):主栏。 -->
-    <MainSidebar
-      v-if="!app.isMobile && !isTopBar" ref="mainSidebarRef" :menu-key="mainMenuKey"
-      @key-change="handleMainMenuKeyChange"
-    />
+    <MainSidebar v-if="!app.isMobile && !isTopBar" ref="mainSidebarRef" @key-change="handleMainMenuKeyChange" />
     <!-- Sidebar (Desktop): Sub Sidebar. 侧边栏(电脑端):副栏。 -->
     <SubSidebar
       v-if="!app.isMobile && (!isTopBar || menuSetting.topMenu.showSubMenu)"
-      :parent-menu-key="mainMenuRootKey" @collapsed="handleSubCollapsed"
+      :parent-menu-key="mainMenuRootKey"
     />
 
     <!-- Right main area. 右侧主体区。 -->

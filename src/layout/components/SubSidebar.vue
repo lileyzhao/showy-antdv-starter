@@ -10,23 +10,16 @@ import { getFullRoutes } from '@/utils'
 
 const props = defineProps({ parentMenuKey: { type: String, required: false } })
 
-const emit = defineEmits(['collapsed'])
-
 // Variables 变量
 const { t } = useI18n()
 const { token } = ATheme.useToken()
 const app = useAppStore()
 const route = useRoute()
 const fullRoutes = getFullRoutes()
+const subMenuRoutes = ref<RouteRecordRaw[]>([])
 
 /** Menu setting 菜单设置 */
 const menuSetting = computed(() => app.MenuSetting)
-
-/** Selected Item in sub-menu 副栏菜单选中项 */
-const subMenuKey = computed<string[]>({
-  get: () => [route.name as string],
-  set: () => { },
-})
 
 /** Collapsed State of sub-menu 副栏菜单收缩状态 */
 const collSubMenu = computed({
@@ -37,7 +30,13 @@ const collSubMenu = computed({
   },
 })
 
-const subMenuRoutes = ref<RouteRecordRaw[]>([])
+/** Selected Item in sub-menu 副栏菜单选中项 */
+const subMenuKey = computed<string[]>({
+  get: () => [route.name as string],
+  set: () => { },
+})
+
+/** sub-menu data 副栏菜单数据 */
 const subMenuOptions = ref<ItemType[]>([])
 const getSubMenuOptions = (mainMenuKey: string) => {
   return fullRoutes.filter(route => route.meta.parentName === mainMenuKey).map(route => mapRoutesAnt(route, fullRoutes, t, true))
@@ -53,13 +52,6 @@ const refreshSubMenu = (mainMenuRootKey?: string) => {
     subMenuKey.value = [route.name as string]
   }
   else { subMenuOptions.value = [] }
-}
-
-/** Toggle sub-menu status 切换副栏菜单状态 */
-const handleToggleSub = (status: boolean) => {
-  collSubMenu.value = status
-  emit('collapsed', toRaw(collSubMenu.value))
-  refreshSubMenu()
 }
 
 // Do not delete: Removing onMounted will cause the menu to be blank during hot refresh
@@ -84,8 +76,7 @@ defineExpose({ refreshSubMenu })
     :collapsed-width="0" :collapsed="collSubMenu"
     :show-trigger="menuSetting.buttons.includes(MenuButtonEnum.SubMenuStatus) && app.MenuSetting.menuPosition === MenuPositionEnum.SIDEBAR ? 'arrow-circle' : false"
     :bordered="!collSubMenu" content-class="of-x-hidden!" z-2 theme="light"
-    :style="`height:100vh;border-right:1px solid ${token.colorBorderSecondary};`" @collapse="handleToggleSub(true)"
-    @expand="handleToggleSub(false)"
+    :style="`height:100vh;border-right:1px solid ${token.colorBorderSecondary};`"
   >
     <a-layout-header
       bordered

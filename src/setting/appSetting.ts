@@ -9,7 +9,7 @@ export const version = '0.1.0'
 /**
  * Default theme mode 默认主题模式
  */
-export const darkMode = ThemeModeEnum.SYSTEM
+export const darkMode = ThemeModeEnum.LIGHT
 
 /**
  * Default locale setting 默认区域设置

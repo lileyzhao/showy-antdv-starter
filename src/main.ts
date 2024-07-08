@@ -29,7 +29,13 @@ async function bootstrap() {
   // https://router.vuejs.org/api/interfaces/Router.html#isReady
   await router.isReady()
 
-  app.mount('#app')
+  // 应用挂载后移除加载效果
+  app.mount('#app').$nextTick(() => {
+    const loadingElement = document.getElementById('loading')
+    if (loadingElement) {
+      loadingElement.style.display = 'none'
+    }
+  })
 }
 
 // 执行应用设置

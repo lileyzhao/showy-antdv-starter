@@ -85,18 +85,32 @@ defineExpose({ refreshMainMenu })
       mode="vertical" :class="`main-menu ${app.MenuSetting.mainMenu.collapsed ? 'main-menu-coll' : ''}`" class="b-0!"
       @select="handleMainMenuKeyChange"
     />
-    <div v-if="!app.IsDarkMode" absolute bottom-12px h-20px w-full>
+    <div v-if="!app.IsDarkMode && !collMainMenu" absolute bottom-12px h-20px w-full>
       <div
         :class="`left-50% -translate-x-1/2 i-line-md:${mainMenuInverted ? 'sunny-filled hover:text-yellow text-white' : 'moon-filled hover:text-purple'}`"
         absolute cursor-pointer text-18px @click="mainMenuInverted = !mainMenuInverted"
       />
       <div
-        v-if="collSubMenu" :class="`i-carbon:side-panel-close ${mainMenuInverted ? 'text-white' : ''}`"
-        absolute right-2 rotate-180 cursor-pointer text-18px @click="collSubMenu = !collSubMenu"
+        v-if="collSubMenu" :class="`i-carbon:side-panel-close ${mainMenuInverted ? 'text-white' : ''}`" absolute
+        right-2 rotate-180 cursor-pointer text-18px @click="collSubMenu = !collSubMenu"
       />
       <div
-        v-else :class="`i-carbon:side-panel-close ${mainMenuInverted ? 'text-white' : ''}`"
-        absolute right-2 cursor-pointer text-18px @click="collSubMenu = !collSubMenu"
+        v-else :class="`i-carbon:side-panel-close ${mainMenuInverted ? 'text-white' : ''}`" absolute right-2
+        cursor-pointer text-18px @click="collSubMenu = !collSubMenu"
+      />
+    </div>
+    <div v-else-if="!app.IsDarkMode && collMainMenu" absolute bottom-12px h-20px w-full>
+      <div
+        :class="`left-50% -translate-x-1/2 i-line-md:${mainMenuInverted ? 'sunny-filled hover:text-yellow text-white' : 'moon-filled hover:text-purple'}`"
+        absolute cursor-pointer text-18px @click="mainMenuInverted = !mainMenuInverted"
+      />
+      <div
+        v-if="collSubMenu" :class="`i-carbon:side-panel-close ${mainMenuInverted ? 'text-white' : ''}`" absolute
+        right-2 rotate-180 cursor-pointer text-18px @click="collSubMenu = !collSubMenu"
+      />
+      <div
+        v-else :class="`i-carbon:side-panel-close ${mainMenuInverted ? 'text-white' : ''}`" absolute right-2
+        cursor-pointer text-18px @click="collSubMenu = !collSubMenu"
       />
     </div>
   </a-layout-sider>
